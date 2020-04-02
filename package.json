@@ -1,0 +1,47 @@
+{
+  "name": "typescript-example",
+  "version": "1.0.0",
+  "description": "Typescript Example",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint . --ext .ts",
+    "lint_fix": "eslint . --ext .ts --fix",
+    "prettier_format": "prettier --config .prettierrc 'src/**/*.ts' --write",
+    "nodemon": "nodemon",
+    "start:dev": "npm run build:live",
+    "start:prod": "npm run build:live_prod",
+    "clean_dist": "rimraf ./build",
+    "build": "rimraf ./build && tsc",
+    "build:live": "env $(cat .env_dev) nodemon --watch '*.ts' --exec 'ts-node' src/app.ts",
+    "build:live_prod": "env $(cat .env_prod) nodemon --watch '*.ts' --exec 'ts-node' src/app.ts",
+    "build:prod": "npm run build && node build/app.js",
+    "try:build:dev": "env $(cat .env_dev) node build/app.js",
+    "try:build:prod": "env $(cat .env_prod) node build/app.js"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run prettier_format && npm run lint"
+    }
+  },
+  "author": "Anıl Gülgör",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/lodash": "^4.14.149",
+    "@typescript-eslint/eslint-plugin": "^2.26.0",
+    "@typescript-eslint/parser": "^2.26.0",
+    "dotenv": "^8.2.0",
+    "eslint": "^6.8.0",
+    "eslint-config-prettier": "^6.10.1",
+    "eslint-plugin-prettier": "^3.1.2",
+    "figlet": "^1.3.0",
+    "husky": "^4.2.3",
+    "nodemon": "^2.0.2",
+    "prettier": "^2.0.2",
+    "rimraf": "^3.0.2"
+  },
+  "dependencies": {
+    "ts-node": "^8.8.1",
+    "typescript": "^3.8.3"
+  }
+}
