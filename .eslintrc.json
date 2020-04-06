@@ -38,6 +38,9 @@
             "error",
             "always"
         ],
+        "no-unused-vars": [
+            "warn"
+        ],
         "prettier/prettier": 2
     }
 }

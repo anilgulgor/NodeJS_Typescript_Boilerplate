@@ -1,6 +1,4 @@
-import f from 'figlet';
+import Server from './server/server';
 
-f(process.env.ENV, (err: any, data: any) => {
-	if (err) return console.log(`Something went wrong. Error: ${err}`);
-	console.log(data);
-});
+let server: Server = new Server(3000, 'localhost');
+server.init();
