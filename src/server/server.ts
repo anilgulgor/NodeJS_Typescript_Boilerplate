@@ -18,17 +18,13 @@ class Server {
 		this.host = _host;
 	}
 
-	verify(decoded: {}, request: hapi.Request ) {
-
-        return new Promise<Object>((resolve, reject) => {
-            
-            resolve({
-                isValid: true,
-                credentials: decoded
-            })
-
-        })
-		
+	async verify(decoded: {}, request: hapi.Request) {
+		return new Promise<Object>((resolve, reject) => {
+			resolve({
+				isValid: true,
+				credentials: decoded
+			});
+		});
 	}
 
 	async init() {
@@ -49,11 +45,9 @@ class Server {
 		}
 
 		try {
-            const secret = process.env.TOKEN_SECRET
-
 			server.auth.strategy('token', 'jwt', {
-				key: secret,
-				validate: this.verify,
+				key: process.env.TOKEN_SECRET,
+				validate: await this.verify,
 				verifyOptions: { algorithms: ['HS256'] }
 			});
 			server.auth.default('token');
@@ -100,7 +94,7 @@ class Server {
 		});
 
 		await server.start();
-		console.log('Server running on %s', server.info.uri);
+		server.log(`Server running on ${server.info.uri}`);
 
 		f(process.env.ENV, (err: any, data: any) => {
 			if (err) return console.log(`Something went wrong. Error: ${err}`);
