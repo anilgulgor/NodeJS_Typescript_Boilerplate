@@ -3,6 +3,7 @@ import * as Inert from '@hapi/inert';
 import * as Vision from '@hapi/vision';
 import * as Swagger from 'hapi-swagger';
 import * as HapiPino from 'hapi-pino';
+import * as Pino from 'pino'
 import * as HapiAuthJWT2 from 'hapi-auth-jwt2';
 import * as fs from 'fs';
 import { getCurrentDate } from '../helpers/dateHelper';
@@ -17,6 +18,7 @@ export const SwaggerOptions: Swagger.RegisterOptions = {
 		}
 	}
 };
+
 
 export const Plugins: Array<Hapi.ServerRegisterPluginObject<any>> = [
 	{
@@ -35,19 +37,23 @@ export const Plugins: Array<Hapi.ServerRegisterPluginObject<any>> = [
 	{
 		plugin: HapiPino,
 		options: {
-			prettyPrint:
+            timestamp: Pino.stdTimeFunctions.unixTime,
+            prettyPrint:
 				process.env.ENV === 'development'
 					? true
 					: {
-							colorize: true
+							colorize: false
 					  },
-			customLevels: ['fatal', 'error', 'warn'],
 			redact: ['req.headers.authorization'],
 			stream:
 				process.env.ENV === 'development'
 					? false
-					: fs.createWriteStream(__dirname + `/../../production_logs/${getCurrentDate()}.log`, {flags: 'a'}),
-			ignorePaths: ['/documentation', '/swaggerui']
+					: fs.createWriteStream(
+							__dirname + `/../../production_logs/${getCurrentDate()}.log`,
+							{ flags: 'a' }
+					  ),
+            ignorePaths: ['/documentation', '/swaggerui'],
+            logPayload: true
 		}
 	}
 ];

@@ -93,9 +93,8 @@ class Server {
 			}
 		});
 
-		await server.start();
-		server.log(`Server running on ${server.info.uri}`);
-
+        await server.start();
+        
 		f(process.env.ENV, (err: any, data: any) => {
 			if (err) return console.log(`Something went wrong. Error: ${err}`);
 			console.log(data);
